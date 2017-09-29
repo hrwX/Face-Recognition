@@ -1,3 +1,8 @@
 # Image-Processing
 
-Dependencies
+# Requirements:
+- OpenCV(haar-cascade)
+- Hadoop
+
+# Languages Used:
+- Python
