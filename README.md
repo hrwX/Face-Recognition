@@ -1,8 +1,8 @@
 # Image-Processing
 
 # Requirements:
-- OpenCV(haar-cascade)
-- Hadoop
+- OpenCV(haar-cascades, Eigen Face Recognizer)
+- OpenCV experimental features(opencv-contrib)
 
 # Languages Used:
 - Python
