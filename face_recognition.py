@@ -157,3 +157,16 @@ def recognize_people(people_folder):
             sys.exit()
 
 if __name__ == '__main__':
+	print (30 * '-')
+	print ("1. Add person to the recognizer system")
+    	print ("2. Start recognizer")
+    	print ("3. Exit")
+    	print (30 * '-')
+    	PEOPLE_FOLDER = "people/"
+    	CHOICE = int(input('Enter your choice [1-3] : '))
+    	if CHOICE == 1:
+        	add_person(PEOPLE_FOLDER)
+    	if CHOICE == 2:
+        	recognize_people(PEOPLE_FOLDER)
+    	if CHOICE == 3:
+        	sys.exit()
