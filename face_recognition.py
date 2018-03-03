@@ -98,6 +98,19 @@ def add_person(people_folder):
             cv2.imshow('Video Feed', frame)
             cv2.waitKey(50)
             timer += 5
+	
+	people = [person for person in os.listdir(people_folder)]
+	images = []
+	labels = []
+	labels_people = {}
+	for i, person in enumerate(people):
+		labels_people[i] = person
+		for image in os.listdir(people_folder + person):
+			images.append(cv2.imread(people_folder + person + '/' + image, 0))
+			labels.append(i)
+	recognizer.train(images, np.array(labels))
+    	recognizer.save('trainner/trainner.yml')
+	
     else:
         print ("This name already exists.")
         sys.exit()
