@@ -1,7 +1,7 @@
 # Image-Processing
 
 # Requirements:
-- OpenCV(haar-cascades, Eigen Face Recognizer)
+- OpenCV(haar-cascades, LBPH Face Recognizer)
 - OpenCV experimental features(opencv-contrib)
 
 # Languages Used:
