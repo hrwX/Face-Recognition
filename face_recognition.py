@@ -99,17 +99,26 @@ def add_person(people_folder):
             cv2.waitKey(50)
             timer += 5
 	
-	people = [person for person in os.listdir(people_folder)]
-	images = []
-	labels = []
-	labels_people = {}
-	for i, person in enumerate(people):
-		labels_people[i] = person
-		for image in os.listdir(people_folder + person):
-			images.append(cv2.imread(people_folder + person + '/' + image, 0))
-			labels.append(i)
-	recognizer.train(images, np.array(labels))
-    	recognizer.save('trainner/trainner.yml')
+	recognizer = cv2.face.LBPHFaceRecognizer_create()
+        try:
+            people = [person for person in os.listdir(people_folder)]
+        except:
+            print ("Have you added at least one person to the system?")
+            sys.exit()
+        images = []
+        labels = []
+        labels_people = {}
+        for i, person in enumerate(people):
+            labels_people[i] = person
+            for image in os.listdir(people_folder + person):
+                images.append(cv2.imread(people_folder + person + '/' + image, 0))
+                labels.append(i)
+        try:
+            recognizer.train(images, np.array(labels))
+            recognizer.save('trainer/trainer.yml')
+        except:
+            print ("\nOpenCV Error: Do you have at least two people in the database?\n")
+            sys.exit()
 	
     else:
         print ("This name already exists.")
@@ -128,7 +137,7 @@ def recognize_people(people_folder):
     print ("EigenFaces Algorithm")
     print (30 * '-')
     detector = FaceDetector('haarcascade_frontalface_default.xml')
-    recognizer = cv2.face.EigenFaceRecognizer_create()
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
     threshold = 4000
     images = []
     labels = []
