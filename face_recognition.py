@@ -16,7 +16,7 @@ class VideoCamera(object):
 
     def get_frame(self, in_grayscale = False):
         _, frame = self.video.read()
-        #print (frame)
+        frame = cv2.flip(frame, 1)
         if in_grayscale:
             frame = cv2.cvtColor(frame, cv2.COLOR_BAYER_BG2GRAY)
         return frame
@@ -50,10 +50,9 @@ def normalize_intensity(images):
     images_norm.append(cv2.equalizeHist(images))
     return images_norm
 
-def resize(images, size=(100, 100)):
+def resize(images, size=(200, 200)):
     images_norm = []
     for image in images:
-        is_color = len(image.shape) == 3
         if image.shape < size:
             image_norm = cv2.resize(image, size, interpolation=cv2.INTER_AREA)
         else:
@@ -71,9 +70,9 @@ def get_images(frame, faces_coord):
     faces_img = resize(faces_img)
     return (frame, faces_img)
 
-def add_person(people_folder):
-    print ("add_person")
-    person_name = input('What is the name of the new person: ').lower()
+def add_person():
+    people_folder = "people/"
+    person_name = Entry1.get().lower()
     folder = people_folder + person_name
     if not os.path.exists(folder):
         input("20 pictures will be taken. Press ENTER when ready.")
@@ -98,33 +97,61 @@ def add_person(people_folder):
             cv2.imshow('Video Feed', frame)
             cv2.waitKey(50)
             timer += 5
-	
-	recognizer = cv2.face.LBPHFaceRecognizer_create()
-        try:
-            people = [person for person in os.listdir(people_folder)]
-        except:
-            print ("Have you added at least one person to the system?")
-            sys.exit()
-        images = []
-        labels = []
-        labels_people = {}
-        for i, person in enumerate(people):
-            labels_people[i] = person
-            for image in os.listdir(people_folder + person):
-                images.append(cv2.imread(people_folder + person + '/' + image, 0))
-                labels.append(i)
-        try:
-            recognizer.train(images, np.array(labels))
-            recognizer.save('trainer/trainer.yml')
-        except:
-            print ("\nOpenCV Error: Do you have at least two people in the database?\n")
-            sys.exit()
-	
+
+        train_algo(people_folder)
+    
     else:
         print ("This name already exists.")
         sys.exit()
+        
+def update_algo(people_folder):
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    try:
+        people = [person for person in os.listdir(people_folder)]
+    except:
+        print ("Have you added at least one person to the system?")
+        sys.exit()
+    #   recognizer.update(InputArrayOfArrays src, InputArray labels);
+    images = []
+    labels = []
+    labels_people = {}
+    for i, person in enumerate(people):
+        labels_people[i] = person
+        for image in os.listdir(people_folder + person):
+            images.append(cv2.imread(people_folder + person + '/' + image, 0))
+            labels.append(i)
+    try:
+        recognizer.train(images, np.array(labels))
+        recognizer.save('trainer/trainer.yml')
+    except:
+        print ("\nOpenCV Error: Do you have at least two people in the database?\n")
+        sys.exit()
+
+def train_algo(people_folder):
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    try:
+        people = [person for person in os.listdir(people_folder)]
+    except:
+        print ("Have you added at least one person to the system?")
+        sys.exit()
+    
+    images = []
+    labels = []
+    labels_people = {}
+    for i, person in enumerate(people):
+        labels_people[i] = person
+        for image in os.listdir(people_folder + person):
+            images.append(cv2.imread(people_folder + person + '/' + image, 0))
+            labels.append(i)
+    try:
+        recognizer.train(images, np.array(labels))
+        recognizer.save('trainer/trainer.yml')
+    except:
+        print ("\nOpenCV Error: Do you have at least two people in the database?\n")
+        sys.exit()        
 				
-def recognize_people(people_folder):
+def recognize_people():
+    people_folder = "people/"
     try:
         people = [person for person in os.listdir(people_folder)]
     except:
@@ -134,9 +161,9 @@ def recognize_people(people_folder):
     for person in people:
         print ("-" + person)
     print (30 * '-')
-    print ("EigenFaces Algorithm")
+    print ("Local Binary Pattern Histogram Algorithm")
     print (30 * '-')
-    detector = FaceDetector('haarcascade_frontalface_default.xml')
+    detector = FaceDetector('haarcascade_frontalface_alt2.xml')
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     threshold = 4000
     images = []
@@ -148,11 +175,11 @@ def recognize_people(people_folder):
             images.append(cv2.imread(people_folder + person + '/' + image, 0))
             labels.append(i)
     try:
-        recognizer.read('trainner/trainner.yml')#images, np.array(labels))
-        #recognizer.save('trainner/trainner.yml')
+        recognizer.read('trainer/trainer.yml')
     except:
         print ("\nOpenCV Error: Do you have at least two people in the database?\n")
         sys.exit()
+    
     video = VideoCamera()
     
     while True:
