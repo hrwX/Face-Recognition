@@ -63,10 +63,10 @@ class FaceDetector(object):
                     if eye.shape[0] == 2:                                                             
                         if eye[1][0] > eye[0][0]:
                             DY = ((eye[1][1] + eye[1][3] / 2) - (eye[0][1] + eye[0][3] / 2))    # Height diffrence between the eye
-                            DX = ((eye[1][0] + eye[1][2] / 2) - eye[0][0] + (eye[0][2] / 2))    # Width diffrance between the eye
+                            DX = ((eye[1][0] + eye[1][2] / 2) - eye[0][0] + (eye[0][2] / 2))    # Width difference between the eye
                         else:
-                            DY = (-(eye[1][1] + eye[1][3] / 2) + (eye[0][1] + eye[0][3] / 2))   # Height diffrence between the eye
-                            DX = (-(eye[1][0] + eye[1][2] / 2) + eye[0][0] + (eye[0][2] / 2))   # Width diffrance between the eye
+                            DY = (-(eye[1][1] + eye[1][3] / 2) + (eye[0][1] + eye[0][3] / 2))
+                            DX = (-(eye[1][0] + eye[1][2] / 2) + eye[0][0] + (eye[0][2] / 2))
                         if (DX != 0.0) and (DY != 0.0):                                         # Make sure the the change happens only if there is an angle
                             Theta = math.degrees(math.atan(round(float(DY) / float(DX), 2)))    # Find the Angle
                             print("Theta  " + str(Theta))
