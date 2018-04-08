@@ -56,7 +56,7 @@ class FaceDetector(object):
         if faces_coord == ():
             print("none")
             return frame
-        else:
+        elif eye != ():
             for (fx, fy, fw, fh) in faces_coord:
                 for (sx, sy, sw, sh) in eye:
                     print("in for")
@@ -80,6 +80,8 @@ class FaceDetector(object):
                     else:
                         print(frame)
                         return frame
+	else:
+            return frame
             
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
